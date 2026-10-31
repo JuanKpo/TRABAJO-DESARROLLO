@@ -69,4 +69,21 @@ public class Reservation implements Identifiable {
       return reservation;
     }
   }
+
+  @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof Reservation)) {
+        return false;
+      }
+      Reservation otra = (Reservation) o;
+      return id != null && id.equals(otra.id);
+    }
+
+    @Override
+    public int hashCode() {
+      return id == null ? 0 : id.hashCode();
+    }
 }
