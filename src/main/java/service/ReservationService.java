@@ -20,8 +20,10 @@ import util.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ReservationService {
   private final ReservationDao reservationDao;
@@ -66,12 +68,19 @@ public class ReservationService {
         request.date());
   }
 
-  // Ejercicio 1
-  public List<Reservation> getReservationsByUser(
-      List<Reservation> reservations, String username, UserDao userDao)
-      throws UserNotFoundException, DataAccessException {
-    throw new UnsupportedOperationException("Ejercicio 1: implement getReservationsByUser");
-  }
+// Ejercicio 1
+    public List<Reservation> getReservationsByUser(List<Reservation> reservations, String username, UserDao userDao) 
+            throws DataAccessException, UserNotFoundException {
+        
+        if (userDao.findByUsername(username) == null) {
+            throw new UserNotFoundException("El usuario '" + username + "' no existe.");
+        }
+
+        return reservations.stream()
+                .filter(reservation -> reservation.getOwner().getUsername().equals(username))
+                .sorted(Comparator.comparing(Reservation::calculatePrice).reversed())
+                .collect(Collectors.toList());
+    }
 
   // Ejercicio 3
   public List<Reservation> getTopNMostExpensive(
