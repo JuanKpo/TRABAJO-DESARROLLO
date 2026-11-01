@@ -72,9 +72,9 @@ public class ReservationService {
     public List<Reservation> getReservationsByUser(List<Reservation> reservations, String username, UserDao userDao) 
             throws DataAccessException, UserNotFoundException {
         
-        if (userDao.findByUsername(username) == null) {
-            throw new UserNotFoundException("El usuario '" + username + "' no existe.");
-        }
+       if (userDao.findByUsername(username).isEmpty()) {
+    throw new UserNotFoundException("El usuario con '" + username + "' no existe.");
+    }
 
         return reservations.stream()
                 .filter(reservation -> reservation.getOwner().getUsername().equals(username))
